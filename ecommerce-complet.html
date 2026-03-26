@@ -1,0 +1,3314 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NOVA — The Modern Store</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Satoshi:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ═══════════════════════════════
+   DESIGN TOKENS
+═══════════════════════════════ */
+      :root {
+        --ink: #0a0a0f;
+        --ink2: #13131a;
+        --ink3: #1c1c27;
+        --surface: #212130;
+        --border: rgba(255, 255, 255, 0.08);
+        --border2: rgba(255, 255, 255, 0.14);
+        --text: #eeeef5;
+        --muted: #8888a4;
+        --muted2: #5b5b72;
+        --gold: #d4a853;
+        --gold2: #f0c97a;
+        --gold-dim: rgba(212, 168, 83, 0.15);
+        --teal: #00c9a7;
+        --teal-dim: rgba(0, 201, 167, 0.12);
+        --rose: #ff6b8a;
+        --rose-dim: rgba(255, 107, 138, 0.12);
+        --blue: #5b8def;
+        --radius: 14px;
+        --radius-lg: 20px;
+        --radius-xl: 28px;
+        --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        --shadow-gold: 0 8px 32px rgba(212, 168, 83, 0.25);
+      }
+
+      /* ═══════════════════════════════
+   RESET & BASE
+═══════════════════════════════ */
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: var(--ink);
+        color: var(--text);
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+      button,
+      input,
+      select,
+      textarea {
+        font-family: inherit;
+      }
+      img {
+        display: block;
+        max-width: 100%;
+      }
+
+      /* ═══════════════════════════════
+   SCROLLBAR
+═══════════════════════════════ */
+      ::-webkit-scrollbar {
+        width: 4px;
+      }
+      ::-webkit-scrollbar-track {
+        background: var(--ink2);
+      }
+      ::-webkit-scrollbar-thumb {
+        background: var(--surface);
+        border-radius: 2px;
+      }
+
+      /* ═══════════════════════════════
+   ANNOUNCEMENT BAR
+═══════════════════════════════ */
+      .ann-bar {
+        background: var(--gold);
+        color: var(--ink);
+        text-align: center;
+        padding: 9px 24px;
+        font-size: 12.5px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 24px;
+      }
+      .ann-bar span {
+        opacity: 0.75;
+      }
+      .ann-sep {
+        opacity: 0.3;
+      }
+
+      /* ═══════════════════════════════
+   HEADER / NAV
+═══════════════════════════════ */
+      header {
+        background: rgba(10, 10, 15, 0.92);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--border);
+        position: sticky;
+        top: 0;
+        z-index: 300;
+      }
+      .nav-main {
+        max-width: 1340px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 200px 1fr 200px;
+        align-items: center;
+        padding: 16px 24px;
+        gap: 24px;
+      }
+      .logo-wrap {
+        display: flex;
+        flex-direction: column;
+        line-height: 1;
+      }
+      .logo-text {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 34px;
+        letter-spacing: 4px;
+        background: linear-gradient(135deg, var(--gold), var(--gold2));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .logo-sub {
+        font-size: 9px;
+        letter-spacing: 3px;
+        color: var(--muted);
+        text-transform: uppercase;
+        margin-top: 1px;
+      }
+
+      /* Search */
+      .nav-search {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+      .nav-search input {
+        width: 100%;
+        background: var(--ink3);
+        border: 1px solid var(--border);
+        border-radius: 50px;
+        padding: 11px 50px 11px 20px;
+        color: var(--text);
+        font-size: 14px;
+        outline: none;
+        transition: all 0.25s;
+      }
+      .nav-search input::placeholder {
+        color: var(--muted2);
+      }
+      .nav-search input:focus {
+        border-color: var(--gold);
+        box-shadow: 0 0 0 4px var(--gold-dim);
+        background: var(--ink2);
+      }
+      .search-icon {
+        position: absolute;
+        right: 16px;
+        color: var(--muted);
+        font-size: 16px;
+        cursor: pointer;
+        transition: color 0.2s;
+      }
+      .search-icon:hover {
+        color: var(--gold);
+      }
+
+      /* Nav right */
+      .nav-right {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 8px;
+      }
+      .nav-btn {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: transparent;
+        border: 1px solid var(--border);
+        color: var(--muted);
+        cursor: pointer;
+        font-size: 17px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+        position: relative;
+      }
+      .nav-btn:hover {
+        border-color: var(--gold);
+        color: var(--gold);
+        background: var(--gold-dim);
+      }
+      .nav-badge {
+        position: absolute;
+        top: -3px;
+        right: -3px;
+        background: var(--gold);
+        color: var(--ink);
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        font-size: 10px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid var(--ink);
+      }
+      .cart-nav-btn {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: linear-gradient(135deg, var(--gold), var(--gold2));
+        color: var(--ink);
+        border: none;
+        border-radius: 50px;
+        padding: 10px 20px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 700;
+        transition: all 0.2s;
+        letter-spacing: 0.3px;
+      }
+      .cart-nav-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-gold);
+      }
+
+      /* Category nav */
+      .cat-bar {
+        border-top: 1px solid var(--border);
+        background: var(--ink2);
+      }
+      .cat-bar-inner {
+        max-width: 1340px;
+        margin: 0 auto;
+        display: flex;
+        padding: 0 24px;
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+      .cat-bar-inner::-webkit-scrollbar {
+        display: none;
+      }
+      .cat-link {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        padding: 12px 18px;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--muted);
+        white-space: nowrap;
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        transition: all 0.2s;
+      }
+      .cat-link:hover {
+        color: var(--text);
+      }
+      .cat-link.active {
+        color: var(--gold);
+        border-bottom-color: var(--gold);
+      }
+
+      /* ═══════════════════════════════
+   HERO
+═══════════════════════════════ */
+      .hero {
+        position: relative;
+        overflow: hidden;
+        min-height: 580px;
+        display: flex;
+        align-items: center;
+      }
+      .hero-bg {
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(
+            ellipse 80% 80% at 70% 50%,
+            rgba(212, 168, 83, 0.08) 0%,
+            transparent 60%
+          ),
+          radial-gradient(
+            ellipse 50% 60% at 20% 80%,
+            rgba(0, 201, 167, 0.05) 0%,
+            transparent 50%
+          ),
+          linear-gradient(160deg, var(--ink) 0%, var(--ink2) 50%, #0e0e18 100%);
+      }
+      .hero-grid-deco {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        background-size: 60px 60px;
+        mask-image: radial-gradient(
+          ellipse 60% 80% at 70% 40%,
+          black 0%,
+          transparent 70%
+        );
+      }
+      .hero-inner {
+        max-width: 1340px;
+        margin: 0 auto;
+        padding: 80px 24px;
+        display: grid;
+        grid-template-columns: 1fr 440px;
+        gap: 60px;
+        align-items: center;
+        position: relative;
+        z-index: 1;
+        width: 100%;
+      }
+      .hero-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 14px;
+        border-radius: 50px;
+        background: var(--gold-dim);
+        border: 1px solid rgba(212, 168, 83, 0.3);
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: 24px;
+      }
+      .hero-eyebrow::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        background: var(--gold);
+        border-radius: 50%;
+        animation: pulse-gold 2s infinite;
+      }
+      @keyframes pulse-gold {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.5;
+          transform: scale(1.5);
+        }
+      }
+      .hero h1 {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: clamp(52px, 7vw, 88px);
+        line-height: 0.95;
+        letter-spacing: 2px;
+        margin-bottom: 24px;
+      }
+      .hero h1 .accent {
+        background: linear-gradient(135deg, var(--gold), var(--gold2));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .hero-desc {
+        font-size: 17px;
+        color: var(--muted);
+        line-height: 1.8;
+        max-width: 440px;
+        margin-bottom: 36px;
+      }
+      .hero-ctas {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+        margin-bottom: 48px;
+      }
+      .btn-gold {
+        background: linear-gradient(135deg, var(--gold), var(--gold2));
+        color: var(--ink);
+        border: none;
+        border-radius: 50px;
+        padding: 14px 30px;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.25s;
+        letter-spacing: 0.3px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .btn-gold:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-gold);
+      }
+      .btn-ghost {
+        background: transparent;
+        color: var(--text);
+        border: 1px solid var(--border2);
+        border-radius: 50px;
+        padding: 14px 28px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.25s;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .btn-ghost:hover {
+        border-color: var(--gold);
+        color: var(--gold);
+        background: var(--gold-dim);
+      }
+      .hero-stats {
+        display: flex;
+        gap: 32px;
+      }
+      .hero-stat .num {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 36px;
+        color: var(--gold);
+        letter-spacing: 1px;
+      }
+      .hero-stat .lbl {
+        font-size: 12px;
+        color: var(--muted);
+        letter-spacing: 0.5px;
+      }
+
+      /* Hero right — featured products */
+      .hero-products {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+      .hero-prod-card {
+        background: var(--ink3);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 18px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        cursor: pointer;
+        transition: all 0.3s;
+        position: relative;
+        overflow: hidden;
+      }
+      .hero-prod-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, var(--gold-dim), transparent);
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+      .hero-prod-card:hover {
+        border-color: rgba(212, 168, 83, 0.3);
+        transform: translateX(4px);
+      }
+      .hero-prod-card:hover::before {
+        opacity: 1;
+      }
+      .hpc-emoji {
+        font-size: 44px;
+        width: 64px;
+        text-align: center;
+        flex-shrink: 0;
+      }
+      .hpc-info {
+        flex: 1;
+        position: relative;
+        z-index: 1;
+      }
+      .hpc-tag {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: 4px;
+      }
+      .hpc-name {
+        font-size: 15px;
+        font-weight: 600;
+        margin-bottom: 4px;
+      }
+      .hpc-price {
+        font-size: 17px;
+        font-weight: 700;
+        color: var(--gold2);
+      }
+      .hpc-old {
+        font-size: 12px;
+        color: var(--muted);
+        text-decoration: line-through;
+        margin-left: 6px;
+      }
+      .hpc-badge {
+        background: var(--teal);
+        color: var(--ink);
+        padding: 3px 10px;
+        border-radius: 50px;
+        font-size: 10px;
+        font-weight: 700;
+        position: absolute;
+        top: 18px;
+        right: 18px;
+      }
+
+      /* ═══════════════════════════════
+   SECTION HEADER
+═══════════════════════════════ */
+      .sec-wrap {
+        max-width: 1340px;
+        margin: 0 auto;
+        padding: 72px 24px;
+      }
+      .sec-header {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        margin-bottom: 36px;
+      }
+      .sec-title-group .overtitle {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .sec-title-group .overtitle::before {
+        content: "";
+        width: 20px;
+        height: 1px;
+        background: var(--gold);
+      }
+      .sec-title-group h2 {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 42px;
+        letter-spacing: 2px;
+        line-height: 1;
+      }
+      .link-more {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--gold);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 10px 20px;
+        border: 1px solid rgba(212, 168, 83, 0.3);
+        border-radius: 50px;
+        transition: all 0.2s;
+      }
+      .link-more:hover {
+        background: var(--gold-dim);
+      }
+
+      /* ═══════════════════════════════
+   FILTER CHIPS
+═══════════════════════════════ */
+      .filter-chips {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 32px;
+      }
+      .chip {
+        padding: 8px 20px;
+        border-radius: 50px;
+        font-size: 13px;
+        font-weight: 500;
+        border: 1px solid var(--border);
+        background: transparent;
+        color: var(--muted);
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .chip:hover {
+        border-color: var(--border2);
+        color: var(--text);
+      }
+      .chip.active {
+        background: var(--gold);
+        color: var(--ink);
+        border-color: var(--gold);
+        font-weight: 700;
+      }
+
+      /* ═══════════════════════════════
+   PRODUCT GRID
+═══════════════════════════════ */
+      .prod-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+      }
+
+      /* Product card */
+      .prod-card {
+        background: var(--ink2);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        cursor: pointer;
+        transition: all 0.3s;
+        position: relative;
+      }
+      .prod-card:hover {
+        border-color: rgba(212, 168, 83, 0.3);
+        transform: translateY(-6px);
+        box-shadow: 0 20px 48px rgba(0, 0, 0, 0.5);
+      }
+      .pc-badge {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        z-index: 3;
+        padding: 4px 12px;
+        border-radius: 50px;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+      }
+      .pc-badge.sale {
+        background: var(--gold);
+        color: var(--ink);
+      }
+      .pc-badge.new-badge {
+        background: var(--teal);
+        color: var(--ink);
+      }
+      .pc-badge.hot {
+        background: var(--rose);
+        color: #fff;
+      }
+      .pc-badge.limited {
+        background: var(--surface);
+        color: var(--text);
+        border: 1px solid var(--border2);
+      }
+      .pc-wish {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        z-index: 3;
+        width: 34px;
+        height: 34px;
+        background: rgba(10, 10, 15, 0.8);
+        border: 1px solid var(--border);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+        cursor: pointer;
+        transition: all 0.2s;
+        backdrop-filter: blur(8px);
+      }
+      .pc-wish:hover {
+        border-color: var(--rose);
+      }
+      .pc-wish.on {
+        border-color: var(--rose);
+        background: var(--rose-dim);
+      }
+      .pc-img {
+        height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 80px;
+        background: linear-gradient(
+          135deg,
+          var(--ink3) 0%,
+          var(--surface) 100%
+        );
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+      }
+      .pc-img::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          ellipse at 50% 60%,
+          rgba(212, 168, 83, 0.06),
+          transparent 70%
+        );
+      }
+      .prod-card:hover .pc-img {
+        transform: scale(1.06);
+      }
+      .pc-quick {
+        position: absolute;
+        bottom: 12px;
+        left: 50%;
+        transform: translateX(-50%) translateY(8px);
+        opacity: 0;
+        transition: all 0.25s;
+        z-index: 4;
+        white-space: nowrap;
+        background: rgba(212, 168, 83, 0.95);
+        color: var(--ink);
+        border: none;
+        border-radius: 50px;
+        padding: 8px 20px;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        backdrop-filter: blur(8px);
+      }
+      .prod-card:hover .pc-quick {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+      .pc-body {
+        padding: 16px;
+      }
+      .pc-cat {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: 6px;
+      }
+      .pc-name {
+        font-size: 15px;
+        font-weight: 600;
+        line-height: 1.35;
+        margin-bottom: 6px;
+      }
+      .pc-rating {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        color: var(--muted);
+        margin-bottom: 14px;
+      }
+      .pc-stars {
+        color: #f59e0b;
+        letter-spacing: 1px;
+      }
+      .pc-foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+      }
+      .pc-price {
+      }
+      .pc-price .current {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--gold2);
+      }
+      .pc-price .old {
+        font-size: 12px;
+        color: var(--muted);
+        text-decoration: line-through;
+        display: block;
+      }
+      .pc-add {
+        background: var(--surface);
+        border: 1px solid var(--border2);
+        color: var(--text);
+        border-radius: 10px;
+        padding: 10px 14px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .pc-add:hover {
+        background: var(--gold);
+        color: var(--ink);
+        border-color: var(--gold);
+      }
+      .pc-add.done {
+        background: var(--teal-dim);
+        border-color: var(--teal);
+        color: var(--teal);
+      }
+
+      /* ═══════════════════════════════
+   CATEGORIES SHOWCASE
+═══════════════════════════════ */
+      .cats-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr;
+        grid-template-rows: auto auto;
+        gap: 16px;
+      }
+      .cat-tile {
+        border-radius: var(--radius-xl);
+        overflow: hidden;
+        position: relative;
+        cursor: pointer;
+        transition: transform 0.3s;
+        min-height: 200px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 24px;
+      }
+      .cat-tile:hover {
+        transform: scale(1.02);
+      }
+      .cat-tile:nth-child(1) {
+        grid-row: span 2;
+        min-height: 440px;
+        background: linear-gradient(160deg, #1a0e2e 0%, #0a0a0f 60%);
+      }
+      .cat-tile:nth-child(2) {
+        background: linear-gradient(160deg, #0e1a1a 0%, #0a0f0a 100%);
+      }
+      .cat-tile:nth-child(3) {
+        background: linear-gradient(160deg, #1a1208 0%, #0a0a0f 100%);
+      }
+      .cat-tile:nth-child(4) {
+        background: linear-gradient(160deg, #0e1018 0%, #0a0a12 100%);
+      }
+      .cat-tile:nth-child(5) {
+        background: linear-gradient(160deg, #180e14 0%, #0a0a0f 100%);
+      }
+      .cat-tile-emoji {
+        position: absolute;
+        right: 24px;
+        top: 24px;
+        font-size: 52px;
+        opacity: 0.5;
+      }
+      .cat-tile-count {
+        font-size: 11px;
+        color: var(--muted);
+        letter-spacing: 0.5px;
+        margin-bottom: 6px;
+      }
+      .cat-tile-name {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 32px;
+        letter-spacing: 2px;
+      }
+      .cat-tile-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 12px;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--gold);
+        opacity: 0;
+        transition: opacity 0.2s;
+      }
+      .cat-tile:hover .cat-tile-link {
+        opacity: 1;
+      }
+      .cat-tile-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          to top,
+          rgba(0, 0, 0, 0.6) 0%,
+          transparent 50%
+        );
+      }
+      .cat-tile-content {
+        position: relative;
+        z-index: 1;
+      }
+
+      /* ═══════════════════════════════
+   PROMO STRIP
+═══════════════════════════════ */
+      .promo-strip {
+        background: var(--ink2);
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+        padding: 40px 0;
+        overflow: hidden;
+        position: relative;
+      }
+      .promo-track {
+        display: flex;
+        gap: 64px;
+        width: max-content;
+        animation: scroll-left 30s linear infinite;
+      }
+      @keyframes scroll-left {
+        from {
+          transform: translateX(0);
+        }
+        to {
+          transform: translateX(-50%);
+        }
+      }
+      .promo-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        white-space: nowrap;
+      }
+      .promo-item .pi-icon {
+        font-size: 22px;
+      }
+      .promo-item .pi-text {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--muted);
+      }
+      .promo-item .pi-text em {
+        color: var(--gold);
+        font-style: normal;
+      }
+
+      /* ═══════════════════════════════
+   TRUST FEATURES
+═══════════════════════════════ */
+      .trust-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 2px;
+        background: var(--border);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+      }
+      .trust-item {
+        background: var(--ink2);
+        padding: 32px 24px;
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+      }
+      .trust-icon-wrap {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        background: var(--gold-dim);
+        border: 1px solid rgba(212, 168, 83, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        flex-shrink: 0;
+      }
+      .trust-label {
+        font-size: 15px;
+        font-weight: 600;
+        margin-bottom: 4px;
+      }
+      .trust-sub {
+        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      /* ═══════════════════════════════
+   REVIEWS SECTION
+═══════════════════════════════ */
+      .reviews-bg {
+        background: var(--ink2);
+        border-top: 1px solid var(--border);
+        padding: 72px 0;
+      }
+      .review-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-top: 36px;
+      }
+      .review-card {
+        background: var(--ink3);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 24px;
+        transition: border-color 0.2s;
+      }
+      .review-card:hover {
+        border-color: rgba(212, 168, 83, 0.2);
+      }
+      .rv-header {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 16px;
+      }
+      .rv-avatar {
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--ink);
+        flex-shrink: 0;
+      }
+      .rv-name {
+        font-size: 14px;
+        font-weight: 600;
+      }
+      .rv-meta {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 2px;
+      }
+      .rv-stars {
+        color: #f59e0b;
+        font-size: 15px;
+        letter-spacing: 2px;
+        margin-bottom: 10px;
+      }
+      .rv-text {
+        font-size: 14px;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+      .rv-verified {
+        font-size: 11px;
+        color: var(--teal);
+        font-weight: 600;
+        margin-top: 12px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .rv-product {
+        font-size: 12px;
+        color: var(--muted2);
+        margin-top: 8px;
+      }
+
+      /* ═══════════════════════════════
+   NEWSLETTER
+═══════════════════════════════ */
+      .nl-section {
+        background: var(--ink2);
+        border-top: 1px solid var(--border);
+        position: relative;
+        overflow: hidden;
+      }
+      .nl-bg {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          ellipse 60% 120% at 50% 100%,
+          rgba(212, 168, 83, 0.07) 0%,
+          transparent 60%
+        );
+      }
+      .nl-inner {
+        max-width: 640px;
+        margin: 0 auto;
+        padding: 80px 24px;
+        text-align: center;
+        position: relative;
+        z-index: 1;
+      }
+      .nl-icon {
+        font-size: 48px;
+        margin-bottom: 20px;
+      }
+      .nl-inner h2 {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 48px;
+        letter-spacing: 2px;
+        margin-bottom: 12px;
+      }
+      .nl-inner h2 span {
+        background: linear-gradient(135deg, var(--gold), var(--gold2));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .nl-inner p {
+        font-size: 16px;
+        color: var(--muted);
+        line-height: 1.7;
+        margin-bottom: 36px;
+      }
+      .nl-form {
+        display: flex;
+        gap: 10px;
+      }
+      .nl-input {
+        flex: 1;
+        background: var(--ink3);
+        border: 1px solid var(--border);
+        color: var(--text);
+        border-radius: 50px;
+        padding: 14px 22px;
+        font-size: 14px;
+        outline: none;
+        transition: all 0.2s;
+      }
+      .nl-input::placeholder {
+        color: var(--muted2);
+      }
+      .nl-input:focus {
+        border-color: var(--gold);
+        box-shadow: 0 0 0 4px var(--gold-dim);
+      }
+      .nl-btn {
+        background: linear-gradient(135deg, var(--gold), var(--gold2));
+        color: var(--ink);
+        border: none;
+        border-radius: 50px;
+        padding: 14px 28px;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: all 0.2s;
+      }
+      .nl-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-gold);
+      }
+
+      /* ═══════════════════════════════
+   FOOTER
+═══════════════════════════════ */
+      footer {
+        background: var(--ink);
+        border-top: 1px solid var(--border);
+        padding: 64px 24px 32px;
+      }
+      .foot-grid {
+        max-width: 1340px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 260px 1fr 1fr 1fr;
+        gap: 48px;
+        margin-bottom: 56px;
+      }
+      .foot-brand .logo-text {
+        font-size: 30px;
+      }
+      .foot-brand p {
+        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.8;
+        margin: 16px 0 24px;
+      }
+      .socials {
+        display: flex;
+        gap: 10px;
+      }
+      .soc-btn {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: var(--ink3);
+        border: 1px solid var(--border);
+        color: var(--muted);
+        font-size: 15px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+      }
+      .soc-btn:hover {
+        background: var(--gold-dim);
+        border-color: rgba(212, 168, 83, 0.3);
+        color: var(--gold);
+      }
+      .foot-col h4 {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: 20px;
+      }
+      .foot-col ul {
+        list-style: none;
+      }
+      .foot-col ul li {
+        margin-bottom: 12px;
+      }
+      .foot-col ul li a {
+        font-size: 14px;
+        color: var(--muted);
+        transition: color 0.2s;
+      }
+      .foot-col ul li a:hover {
+        color: var(--text);
+      }
+      .foot-bottom {
+        max-width: 1340px;
+        margin: 0 auto;
+        border-top: 1px solid var(--border);
+        padding-top: 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .foot-bottom p {
+        font-size: 13px;
+        color: var(--muted2);
+      }
+      .pay-methods {
+        display: flex;
+        gap: 8px;
+      }
+      .pay-badge {
+        background: var(--ink3);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 5px 12px;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--muted);
+      }
+
+      /* ═══════════════════════════════
+   CART DRAWER
+═══════════════════════════════ */
+      .drawer-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 500;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s;
+        backdrop-filter: blur(4px);
+      }
+      .drawer-overlay.open {
+        opacity: 1;
+        pointer-events: all;
+      }
+      .cart-drawer {
+        position: fixed;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 440px;
+        background: var(--ink2);
+        border-left: 1px solid var(--border);
+        z-index: 501;
+        display: flex;
+        flex-direction: column;
+        transform: translateX(100%);
+        transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: -20px 0 60px rgba(0, 0, 0, 0.5);
+      }
+      .drawer-overlay.open .cart-drawer {
+        transform: translateX(0);
+      }
+      .cd-head {
+        padding: 24px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .cd-head h3 {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 24px;
+        letter-spacing: 2px;
+      }
+      .cd-close {
+        width: 38px;
+        height: 38px;
+        background: var(--ink3);
+        border: 1px solid var(--border);
+        border-radius: 50%;
+        color: var(--muted);
+        cursor: pointer;
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+      }
+      .cd-close:hover {
+        background: var(--rose-dim);
+        border-color: var(--rose);
+        color: var(--rose);
+      }
+      .cd-items {
+        flex: 1;
+        overflow-y: auto;
+        padding: 16px 24px;
+      }
+      .cart-item {
+        display: flex;
+        gap: 14px;
+        padding: 16px 0;
+        border-bottom: 1px solid var(--border);
+        align-items: flex-start;
+      }
+      .ci-img {
+        width: 66px;
+        height: 66px;
+        border-radius: 12px;
+        background: var(--ink3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 30px;
+        flex-shrink: 0;
+        border: 1px solid var(--border);
+      }
+      .ci-info {
+        flex: 1;
+      }
+      .ci-name {
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 4px;
+        line-height: 1.3;
+      }
+      .ci-cat {
+        font-size: 11px;
+        color: var(--gold);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 8px;
+      }
+      .ci-price {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--gold2);
+      }
+      .ci-ctrl {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 10px;
+      }
+      .q-btn {
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        color: var(--text);
+        cursor: pointer;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+        font-weight: 600;
+      }
+      .q-btn:hover {
+        background: var(--gold);
+        color: var(--ink);
+        border-color: var(--gold);
+      }
+      .q-val {
+        font-size: 15px;
+        font-weight: 700;
+        min-width: 22px;
+        text-align: center;
+      }
+      .ci-remove {
+        width: 28px;
+        height: 28px;
+        background: transparent;
+        border: none;
+        color: var(--muted2);
+        cursor: pointer;
+        font-size: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        transition: all 0.2s;
+        margin-left: auto;
+      }
+      .ci-remove:hover {
+        background: var(--rose-dim);
+        color: var(--rose);
+      }
+      .cart-empty {
+        text-align: center;
+        padding: 60px 24px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+      }
+      .cart-empty .ce-icon {
+        font-size: 56px;
+        opacity: 0.4;
+      }
+      .cart-empty p {
+        color: var(--muted);
+        font-size: 15px;
+      }
+      .cd-foot {
+        border-top: 1px solid var(--border);
+        padding: 20px 24px;
+      }
+      .cd-subtotal {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+        font-size: 15px;
+        color: var(--muted);
+      }
+      .cd-subtotal strong {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 28px;
+        color: var(--gold2);
+      }
+      .cd-delivery {
+        font-size: 12px;
+        color: var(--muted2);
+        margin-bottom: 20px;
+      }
+      .cd-checkout {
+        width: 100%;
+        background: linear-gradient(135deg, var(--gold), var(--gold2));
+        color: var(--ink);
+        border: none;
+        border-radius: 14px;
+        padding: 16px;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        letter-spacing: 0.3px;
+      }
+      .cd-checkout:hover {
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-gold);
+      }
+      .cd-continue {
+        width: 100%;
+        background: transparent;
+        border: 1px solid var(--border);
+        color: var(--muted);
+        border-radius: 14px;
+        padding: 12px;
+        font-size: 13px;
+        cursor: pointer;
+        margin-top: 10px;
+        transition: all 0.2s;
+      }
+      .cd-continue:hover {
+        border-color: var(--border2);
+        color: var(--text);
+      }
+
+      /* ═══════════════════════════════
+   PRODUCT DETAIL MODAL
+═══════════════════════════════ */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 600;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        backdrop-filter: blur(6px);
+      }
+      .modal-overlay.open {
+        opacity: 1;
+        pointer-events: all;
+      }
+      .prod-modal {
+        background: var(--ink2);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-xl);
+        width: 100%;
+        max-width: 760px;
+        max-height: 92vh;
+        overflow-y: auto;
+        transform: scale(0.9);
+        transition: transform 0.3s;
+        position: relative;
+      }
+      .modal-overlay.open .prod-modal {
+        transform: scale(1);
+      }
+      .pm-close-btn {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        z-index: 10;
+        width: 38px;
+        height: 38px;
+        background: var(--ink3);
+        border: 1px solid var(--border);
+        border-radius: 50%;
+        color: var(--muted);
+        cursor: pointer;
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+      }
+      .pm-close-btn:hover {
+        background: var(--rose-dim);
+        border-color: var(--rose);
+        color: var(--rose);
+      }
+      .pm-layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+      .pm-visual {
+        background: linear-gradient(160deg, var(--ink3), var(--surface));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 110px;
+        min-height: 320px;
+        border-radius: var(--radius-xl) 0 0 var(--radius-xl);
+        position: relative;
+        overflow: hidden;
+      }
+      .pm-visual::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          ellipse at 50% 60%,
+          rgba(212, 168, 83, 0.08),
+          transparent 70%
+        );
+      }
+      .pm-info {
+        padding: 36px;
+      }
+      .pm-cat {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: 10px;
+      }
+      .pm-name {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 34px;
+        letter-spacing: 1px;
+        line-height: 1.05;
+        margin-bottom: 12px;
+      }
+      .pm-rating {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 16px;
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .pm-desc {
+        font-size: 14px;
+        color: var(--muted);
+        line-height: 1.75;
+        margin-bottom: 24px;
+      }
+      .pm-price-block {
+        margin-bottom: 24px;
+      }
+      .pm-price {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 42px;
+        color: var(--gold2);
+        letter-spacing: 1px;
+      }
+      .pm-old {
+        font-size: 16px;
+        color: var(--muted);
+        text-decoration: line-through;
+        margin-left: 8px;
+      }
+      .pm-qty-row {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 20px;
+      }
+      .pm-qty-row .q-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        font-size: 18px;
+      }
+      .pm-qty-val {
+        font-size: 20px;
+        font-weight: 700;
+        min-width: 28px;
+        text-align: center;
+      }
+      .pm-add-btn {
+        width: 100%;
+        background: linear-gradient(135deg, var(--gold), var(--gold2));
+        color: var(--ink);
+        border: none;
+        border-radius: 12px;
+        padding: 16px;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        letter-spacing: 0.3px;
+        margin-bottom: 10px;
+      }
+      .pm-add-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-gold);
+      }
+      .pm-wish-btn {
+        width: 100%;
+        background: transparent;
+        border: 1px solid var(--border);
+        color: var(--muted);
+        border-radius: 12px;
+        padding: 14px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .pm-wish-btn:hover {
+        border-color: var(--rose);
+        color: var(--rose);
+        background: var(--rose-dim);
+      }
+      .pm-features {
+        display: flex;
+        gap: 10px;
+        margin-top: 16px;
+        flex-wrap: wrap;
+      }
+      .pm-feat-tag {
+        padding: 5px 12px;
+        background: var(--ink3);
+        border: 1px solid var(--border);
+        border-radius: 50px;
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      /* ═══════════════════════════════
+   PAYMENT MODAL
+═══════════════════════════════ */
+      .pay-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.85);
+        z-index: 700;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        backdrop-filter: blur(8px);
+      }
+      .pay-overlay.open {
+        opacity: 1;
+        pointer-events: all;
+      }
+      .pay-modal {
+        background: var(--ink2);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-xl);
+        width: 100%;
+        max-width: 520px;
+        max-height: 92vh;
+        overflow-y: auto;
+        transform: scale(0.9);
+        transition: transform 0.3s;
+      }
+      .pay-overlay.open .pay-modal {
+        transform: scale(1);
+      }
+      .pay-head {
+        padding: 26px 28px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      .pay-step-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        background: var(--gold-dim);
+        border: 1px solid rgba(212, 168, 83, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+      }
+      .pay-head h3 {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 22px;
+        letter-spacing: 1px;
+      }
+      .pay-head p {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 2px;
+      }
+      .pay-head-close {
+        margin-left: auto;
+        width: 36px;
+        height: 36px;
+        background: var(--ink3);
+        border: 1px solid var(--border);
+        border-radius: 50%;
+        color: var(--muted);
+        cursor: pointer;
+        font-size: 17px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+      }
+      .pay-head-close:hover {
+        color: var(--rose);
+        border-color: var(--rose);
+      }
+      .pay-progress {
+        padding: 20px 28px 0;
+      }
+      .progress-steps {
+        display: flex;
+        gap: 6px;
+      }
+      .ps {
+        flex: 1;
+        height: 3px;
+        border-radius: 2px;
+        background: var(--surface);
+        transition: background 0.4s;
+      }
+      .ps.done {
+        background: var(--gold);
+      }
+      .pay-body {
+        padding: 24px 28px;
+      }
+      .form-section {
+        margin-bottom: 22px;
+      }
+      .form-section-title {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .form-section-title::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--border);
+      }
+      .fgroup {
+        margin-bottom: 14px;
+      }
+      .fgroup label {
+        display: block;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--muted);
+        margin-bottom: 6px;
+        letter-spacing: 0.3px;
+      }
+      .fgroup input,
+      .fgroup select {
+        width: 100%;
+        background: var(--ink3);
+        border: 1px solid var(--border);
+        color: var(--text);
+        border-radius: 10px;
+        padding: 12px 16px;
+        font-size: 14px;
+        outline: none;
+        transition: all 0.2s;
+      }
+      .fgroup input::placeholder {
+        color: var(--muted2);
+      }
+      .fgroup input:focus,
+      .fgroup select:focus {
+        border-color: var(--gold);
+        box-shadow: 0 0 0 3px var(--gold-dim);
+      }
+      .fgroup select option {
+        background: var(--ink3);
+      }
+      .frow {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+
+      /* Payment methods */
+      .pay-methods-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+      .pm-tile {
+        background: var(--ink3);
+        border: 2px solid var(--border);
+        border-radius: var(--radius);
+        padding: 16px;
+        cursor: pointer;
+        transition: all 0.25s;
+        text-align: center;
+      }
+      .pm-tile:hover {
+        border-color: var(--border2);
+      }
+      .pm-tile.selected {
+        border-color: var(--gold);
+        background: var(--gold-dim);
+      }
+      .pm-tile .pm-emoji {
+        font-size: 26px;
+        margin-bottom: 8px;
+      }
+      .pm-tile .pm-name {
+        font-size: 13px;
+        font-weight: 700;
+      }
+      .pm-tile .pm-desc {
+        font-size: 11px;
+        color: var(--muted);
+        margin-top: 3px;
+      }
+
+      /* Order summary */
+      .order-summary {
+        background: var(--ink3);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 16px;
+        margin-bottom: 20px;
+      }
+      .os-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 13px;
+        padding: 5px 0;
+        color: var(--muted);
+      }
+      .os-row.total-row {
+        border-top: 1px solid var(--border);
+        margin-top: 10px;
+        padding-top: 14px;
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--text);
+      }
+      .os-row.total-row .os-val {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 22px;
+        color: var(--gold2);
+      }
+
+      /* Pay actions */
+      .pay-btn-main {
+        width: 100%;
+        background: linear-gradient(135deg, var(--gold), var(--gold2));
+        color: var(--ink);
+        border: none;
+        border-radius: 12px;
+        padding: 16px;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.25s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        letter-spacing: 0.3px;
+        margin-bottom: 10px;
+      }
+      .pay-btn-main:hover {
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-gold);
+      }
+      .pay-btn-main.success {
+        background: linear-gradient(135deg, var(--teal), #00a88d);
+      }
+      .pay-btn-back {
+        background: transparent;
+        border: none;
+        color: var(--muted);
+        font-size: 13px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 0;
+        margin-bottom: 20px;
+        transition: color 0.2s;
+      }
+      .pay-btn-back:hover {
+        color: var(--text);
+      }
+      .secure-badge {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        font-size: 12px;
+        color: var(--muted2);
+        margin-top: 12px;
+      }
+
+      /* Success screen */
+      .success-wrap {
+        padding: 48px 28px;
+        text-align: center;
+      }
+      .success-wrap .sw-icon {
+        font-size: 64px;
+        margin-bottom: 20px;
+        animation: pop 0.5s ease;
+      }
+      @keyframes pop {
+        0% {
+          transform: scale(0);
+        }
+        80% {
+          transform: scale(1.1);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+      .success-wrap h3 {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 34px;
+        letter-spacing: 2px;
+        color: var(--teal);
+        margin-bottom: 12px;
+      }
+      .order-num-badge {
+        display: inline-block;
+        background: var(--gold-dim);
+        border: 1px solid rgba(212, 168, 83, 0.3);
+        color: var(--gold);
+        font-weight: 700;
+        font-size: 13px;
+        padding: 8px 22px;
+        border-radius: 50px;
+        margin: 12px 0 20px;
+      }
+      .success-wrap p {
+        font-size: 15px;
+        color: var(--muted);
+        line-height: 1.75;
+      }
+
+      /* ═══════════════════════════════
+   TOAST
+═══════════════════════════════ */
+      .toast {
+        position: fixed;
+        bottom: 28px;
+        left: 50%;
+        transform: translateX(-50%) translateY(100px);
+        background: var(--ink3);
+        border: 1px solid var(--border);
+        color: var(--text);
+        padding: 14px 24px;
+        border-radius: 50px;
+        font-size: 14px;
+        font-weight: 500;
+        z-index: 2000;
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        white-space: nowrap;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        backdrop-filter: blur(12px);
+      }
+      .toast.show {
+        transform: translateX(-50%) translateY(0);
+      }
+
+      /* ═══════════════════════════════
+   RESPONSIVE
+═══════════════════════════════ */
+      @media (max-width: 1024px) {
+        .nav-main {
+          grid-template-columns: 160px 1fr auto;
+        }
+        .prod-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .hero-inner {
+          grid-template-columns: 1fr;
+        }
+        .hero-products {
+          display: none;
+        }
+        .trust-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .cats-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+        .cat-tile:nth-child(1) {
+          grid-row: 1;
+          grid-column: span 2;
+          min-height: 220px;
+        }
+        .review-grid {
+          grid-template-columns: 1fr;
+        }
+        .foot-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+        .pm-layout {
+          grid-template-columns: 1fr;
+        }
+        .pm-visual {
+          border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+          min-height: 200px;
+        }
+      }
+      @media (max-width: 640px) {
+        .cart-drawer {
+          width: 100%;
+        }
+        .pay-modal {
+          border-radius: var(--radius-lg);
+        }
+        .nl-form {
+          flex-direction: column;
+        }
+        .cats-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* Stagger animation */
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .prod-card {
+        animation: fadeUp 0.5s ease both;
+      }
+      .prod-card:nth-child(1) {
+        animation-delay: 0.04s;
+      }
+      .prod-card:nth-child(2) {
+        animation-delay: 0.08s;
+      }
+      .prod-card:nth-child(3) {
+        animation-delay: 0.12s;
+      }
+      .prod-card:nth-child(4) {
+        animation-delay: 0.16s;
+      }
+      .prod-card:nth-child(5) {
+        animation-delay: 0.2s;
+      }
+      .prod-card:nth-child(6) {
+        animation-delay: 0.24s;
+      }
+      .prod-card:nth-child(7) {
+        animation-delay: 0.28s;
+      }
+      .prod-card:nth-child(8) {
+        animation-delay: 0.32s;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ══ ANNOUNCEMENT BAR ══ -->
+    <div class="ann-bar">
+      <span>🚀 Livraison express en 24h</span>
+      <span class="ann-sep">|</span>
+      <span
+        >🎁 -15% sur votre première commande · Code :
+        <strong>NOVA15</strong></span
+      >
+      <span class="ann-sep">|</span>
+      <span>💳 Paiement sécurisé · Retour 30 jours</span>
+    </div>
+
+    <!-- ══ HEADER ══ -->
+    <header>
+      <div class="nav-main">
+        <div class="logo-wrap">
+          <span class="logo-text">NOVA</span>
+          <span class="logo-sub">The Modern Store</span>
+        </div>
+        <div class="nav-search">
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Rechercher un produit, une marque…"
+            oninput="handleSearch(this.value)"
+          />
+          <span class="search-icon">🔍</span>
+        </div>
+        <div class="nav-right">
+          <button class="nav-btn" title="Compte">👤</button>
+          <button class="nav-btn" title="Favoris" id="wishBtn">
+            ♡
+            <span class="nav-badge" id="wishCount" style="display: none"
+              >0</span
+            >
+          </button>
+          <button class="cart-nav-btn" onclick="openCart()">
+            🛒 Panier
+            <span
+              id="cartCountBadge"
+              style="
+                background: var(--ink);
+                color: var(--gold);
+                padding: 2px 8px;
+                border-radius: 50px;
+                font-size: 12px;
+              "
+              >0</span
+            >
+          </button>
+        </div>
+      </div>
+      <div class="cat-bar">
+        <div class="cat-bar-inner" id="catBar">
+          <a class="cat-link active" onclick="filterCat(event, 'all')"
+            >🏪 Tout voir</a
+          >
+          <a class="cat-link" onclick="filterCat(event, 'électronique')"
+            >📱 Électronique</a
+          >
+          <a class="cat-link" onclick="filterCat(event, 'audio')">🎧 Audio</a>
+          <a class="cat-link" onclick="filterCat(event, 'maison')">🏠 Maison</a>
+          <a class="cat-link" onclick="filterCat(event, 'mode')">👗 Mode</a>
+          <a class="cat-link" onclick="filterCat(event, 'beauté')">💄 Beauté</a>
+          <a class="cat-link" onclick="filterCat(event, 'sport')">⚽ Sport</a>
+          <a class="cat-link" onclick="filterCat(event, 'alimentation')"
+            >🍎 Alimentation</a
+          >
+        </div>
+      </div>
+    </header>
+
+    <!-- ══ HERO ══ -->
+    <section class="hero">
+      <div class="hero-bg"></div>
+      <div class="hero-grid-deco"></div>
+      <div class="hero-inner">
+        <div>
+          <div class="hero-eyebrow">Nouvelle collection 2025</div>
+          <h1>
+            L'excellence<br />
+            <span class="accent">sans compromis.</span>
+          </h1>
+          <p class="hero-desc">
+            Des milliers de produits soigneusement sélectionnés — électronique,
+            mode, maison et bien plus. Qualité premium, livraison ultra-rapide.
+          </p>
+          <div class="hero-ctas">
+            <button
+              class="btn-gold"
+              onclick="
+                document
+                  .getElementById('produits')
+                  .scrollIntoView({ behavior: 'smooth' })
+              "
+            >
+              🛍️ Explorer la boutique
+            </button>
+            <button class="btn-ghost" onclick="filterCat2('électronique')">
+              📱 Nouvelles sorties →
+            </button>
+          </div>
+          <div class="hero-stats">
+            <div class="hero-stat">
+              <div class="num">50K+</div>
+              <div class="lbl">Clients satisfaits</div>
+            </div>
+            <div class="hero-stat">
+              <div class="num">8 500+</div>
+              <div class="lbl">Produits</div>
+            </div>
+            <div class="hero-stat">
+              <div class="num">4.9★</div>
+              <div class="lbl">Note moyenne</div>
+            </div>
+          </div>
+        </div>
+        <div class="hero-products">
+          <div class="hero-prod-card" onclick="openProductModal(0)">
+            <span class="hpc-badge">NEW</span>
+            <span class="hpc-emoji">📱</span>
+            <div class="hpc-info">
+              <div class="hpc-tag">Électronique</div>
+              <div class="hpc-name">Smartphone Nova X Pro</div>
+              <div class="hpc-price">
+                379 000 FCFA <span class="hpc-old">449 000</span>
+              </div>
+            </div>
+          </div>
+          <div class="hero-prod-card" onclick="openProductModal(2)">
+            <span class="hpc-emoji">🎧</span>
+            <div class="hpc-info">
+              <div class="hpc-tag">Audio</div>
+              <div class="hpc-name">Casque Pro ANC 700</div>
+              <div class="hpc-price">89 000 FCFA</div>
+            </div>
+          </div>
+          <div class="hero-prod-card" onclick="openProductModal(6)">
+            <span class="hpc-emoji">👟</span>
+            <div class="hpc-info">
+              <div class="hpc-tag">Mode</div>
+              <div class="hpc-name">Sneakers Urban Air</div>
+              <div class="hpc-price">
+                45 000 FCFA <span class="hpc-old">58 000</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ PROMO STRIP ══ -->
+    <div class="promo-strip">
+      <div class="promo-track" id="promoTrack"></div>
+    </div>
+
+    <!-- ══ PRODUCTS ══ -->
+    <div class="sec-wrap" id="produits">
+      <div class="sec-header">
+        <div class="sec-title-group">
+          <div class="overtitle">Catalogue complet</div>
+          <h2>Nos Produits</h2>
+        </div>
+        <a class="link-more" href="#">Voir tout →</a>
+      </div>
+      <div class="filter-chips" id="filterChips">
+        <div class="chip active" onclick="filterChip(this, 'all')">Tout</div>
+        <div class="chip" onclick="filterChip(this, 'électronique')">
+          📱 Électronique
+        </div>
+        <div class="chip" onclick="filterChip(this, 'audio')">🎧 Audio</div>
+        <div class="chip" onclick="filterChip(this, 'maison')">🏠 Maison</div>
+        <div class="chip" onclick="filterChip(this, 'mode')">👗 Mode</div>
+        <div class="chip" onclick="filterChip(this, 'beauté')">💄 Beauté</div>
+        <div class="chip" onclick="filterChip(this, 'sport')">⚽ Sport</div>
+        <div class="chip" onclick="filterChip(this, 'alimentation')">
+          🍎 Alimentation
+        </div>
+      </div>
+      <div class="prod-grid" id="prodGrid"></div>
+    </div>
+
+    <!-- ══ CATEGORIES ══ -->
+    <div class="sec-wrap" style="padding-top: 0">
+      <div class="sec-header">
+        <div class="sec-title-group">
+          <div class="overtitle">Parcourir par univers</div>
+          <h2>Nos Catégories</h2>
+        </div>
+      </div>
+      <div class="cats-grid">
+        <div class="cat-tile" onclick="filterChip2('électronique')">
+          <div class="cat-tile-overlay"></div>
+          <span class="cat-tile-emoji">📱</span>
+          <div class="cat-tile-content">
+            <div class="cat-tile-count">342 produits</div>
+            <div class="cat-tile-name">Électronique</div>
+            <div class="cat-tile-link">Découvrir →</div>
+          </div>
+        </div>
+        <div class="cat-tile" onclick="filterChip2('audio')">
+          <div class="cat-tile-overlay"></div>
+          <span class="cat-tile-emoji">🎧</span>
+          <div class="cat-tile-content">
+            <div class="cat-tile-count">128 produits</div>
+            <div class="cat-tile-name">Audio</div>
+            <div class="cat-tile-link">Découvrir →</div>
+          </div>
+        </div>
+        <div class="cat-tile" onclick="filterChip2('mode')">
+          <div class="cat-tile-overlay"></div>
+          <span class="cat-tile-emoji">👗</span>
+          <div class="cat-tile-content">
+            <div class="cat-tile-count">415 produits</div>
+            <div class="cat-tile-name">Mode</div>
+            <div class="cat-tile-link">Découvrir →</div>
+          </div>
+        </div>
+        <div class="cat-tile" onclick="filterChip2('maison')">
+          <div class="cat-tile-overlay"></div>
+          <span class="cat-tile-emoji">🏠</span>
+          <div class="cat-tile-content">
+            <div class="cat-tile-count">267 produits</div>
+            <div class="cat-tile-name">Maison</div>
+            <div class="cat-tile-link">Découvrir →</div>
+          </div>
+        </div>
+        <div class="cat-tile" onclick="filterChip2('beauté')">
+          <div class="cat-tile-overlay"></div>
+          <span class="cat-tile-emoji">💄</span>
+          <div class="cat-tile-content">
+            <div class="cat-tile-count">198 produits</div>
+            <div class="cat-tile-name">Beauté</div>
+            <div class="cat-tile-link">Découvrir →</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ TRUST ══ -->
+    <div class="sec-wrap" style="padding-top: 0">
+      <div class="trust-grid">
+        <div class="trust-item">
+          <div class="trust-icon-wrap">🚚</div>
+          <div>
+            <div class="trust-label">Livraison express</div>
+            <div class="trust-sub">
+              Douala en 30–90 min · Reste du Cameroun sous 48h
+            </div>
+          </div>
+        </div>
+        <div class="trust-item">
+          <div class="trust-icon-wrap">🔒</div>
+          <div>
+            <div class="trust-label">Paiement 100% sécurisé</div>
+            <div class="trust-sub">
+              MTN MoMo, Orange Money, Visa, Mastercard
+            </div>
+          </div>
+        </div>
+        <div class="trust-item">
+          <div class="trust-icon-wrap">↩️</div>
+          <div>
+            <div class="trust-label">Retour & remboursement</div>
+            <div class="trust-sub">
+              30 jours pour changer d'avis, sans frais
+            </div>
+          </div>
+        </div>
+        <div class="trust-item">
+          <div class="trust-icon-wrap">🎧</div>
+          <div>
+            <div class="trust-label">Support dédié 7j/7</div>
+            <div class="trust-sub">
+              WhatsApp, appel, email — réponse en moins d'1h
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ REVIEWS ══ -->
+    <div class="reviews-bg">
+      <div class="sec-wrap">
+        <div class="sec-header">
+          <div class="sec-title-group">
+            <div class="overtitle">Témoignages</div>
+            <h2>Ce qu'ils disent</h2>
+          </div>
+          <a class="link-more" href="#">Tous les avis →</a>
+        </div>
+        <div class="review-grid">
+          <div class="review-card">
+            <div class="rv-header">
+              <div
+                class="rv-avatar"
+                style="background: linear-gradient(135deg, #d4a853, #f0c97a)"
+              >
+                KA
+              </div>
+              <div>
+                <div class="rv-name">Karine Asso</div>
+                <div class="rv-meta">Douala · Il y a 3 jours</div>
+              </div>
+            </div>
+            <div class="rv-stars">★★★★★</div>
+            <p class="rv-text">
+              Mon smartphone est arrivé en parfait état, bien emballé, livré en
+              moins d'une heure. NOVA c'est vraiment le meilleur e-commerce du
+              Cameroun, sans hésitation.
+            </p>
+            <div class="rv-product">📱 Smartphone Nova X Pro</div>
+            <div class="rv-verified">✔ Achat vérifié</div>
+          </div>
+          <div class="review-card">
+            <div class="rv-header">
+              <div
+                class="rv-avatar"
+                style="background: linear-gradient(135deg, #00c9a7, #00a88d)"
+              >
+                MN
+              </div>
+              <div>
+                <div class="rv-name">Maxime Nkoulou</div>
+                <div class="rv-meta">Yaoundé · Il y a 1 semaine</div>
+              </div>
+            </div>
+            <div class="rv-stars">★★★★★</div>
+            <p class="rv-text">
+              Le paiement via MTN MoMo est fluide et sécurisé. J'ai reçu ma
+              confirmation instantanément. Le produit correspond exactement à la
+              description. Je reviendrai !
+            </p>
+            <div class="rv-product">🎧 Casque Pro ANC 700</div>
+            <div class="rv-verified">✔ Achat vérifié</div>
+          </div>
+          <div class="review-card">
+            <div class="rv-header">
+              <div
+                class="rv-avatar"
+                style="background: linear-gradient(135deg, #5b8def, #3b6fd4)"
+              >
+                SB
+              </div>
+              <div>
+                <div class="rv-name">Stéphanie Bello</div>
+                <div class="rv-meta">Douala · Il y a 2 semaines</div>
+              </div>
+            </div>
+            <div class="rv-stars">★★★★★</div>
+            <p class="rv-text">
+              Interface superbe, facile à naviguer. J'ai trouvé ce que je
+              cherchais en quelques clics. La qualité des produits est
+              irréprochable. Note parfaite !
+            </p>
+            <div class="rv-product">👗 Robe Wax Collection</div>
+            <div class="rv-verified">✔ Achat vérifié</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ NEWSLETTER ══ -->
+    <div class="nl-section">
+      <div class="nl-bg"></div>
+      <div class="nl-inner">
+        <div class="nl-icon">✉️</div>
+        <h2>Restez dans <span>la boucle</span></h2>
+        <p>
+          Offres exclusives, nouveautés et codes promo directement dans votre
+          boîte mail. Rejoignez 50 000+ abonnés.
+        </p>
+        <div class="nl-form">
+          <input class="nl-input" type="email" placeholder="votre@email.com" />
+          <button class="nl-btn" onclick="subscribeNL()">S'abonner →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ FOOTER ══ -->
+    <footer>
+      <div class="foot-grid">
+        <div class="foot-brand">
+          <div class="logo-wrap">
+            <span class="logo-text" style="font-size: 30px">NOVA</span
+            ><span class="logo-sub">The Modern Store</span>
+          </div>
+          <p>
+            La marketplace premium pour les achats en ligne au Cameroun.
+            Qualité, rapidité et service irréprochable depuis 2020.
+          </p>
+          <div class="socials">
+            <div class="soc-btn">📘</div>
+            <div class="soc-btn">📸</div>
+            <div class="soc-btn">🐦</div>
+            <div class="soc-btn">▶️</div>
+            <div class="soc-btn">💬</div>
+          </div>
+        </div>
+        <div class="foot-col">
+          <h4>Boutique</h4>
+          <ul>
+            <li><a href="#">Électronique</a></li>
+            <li><a href="#">Audio & Son</a></li>
+            <li><a href="#">Mode & Vêtements</a></li>
+            <li><a href="#">Maison & Déco</a></li>
+            <li><a href="#">Beauté & Santé</a></li>
+            <li><a href="#">Sport & Loisirs</a></li>
+            <li><a href="#">Alimentation</a></li>
+            <li><a href="#">Promotions 🔥</a></li>
+          </ul>
+        </div>
+        <div class="foot-col">
+          <h4>Mon compte</h4>
+          <ul>
+            <li><a href="#">Connexion / Inscription</a></li>
+            <li><a href="#">Mes commandes</a></li>
+            <li><a href="#">Mes favoris</a></li>
+            <li><a href="#">Mes adresses</a></li>
+            <li><a href="#">Retours & remboursements</a></li>
+            <li><a href="#">Programme fidélité</a></li>
+          </ul>
+        </div>
+        <div class="foot-col">
+          <h4>Aide</h4>
+          <ul>
+            <li><a href="#">Centre d'aide / FAQ</a></li>
+            <li><a href="#">Livraison & délais</a></li>
+            <li><a href="#">Modes de paiement</a></li>
+            <li><a href="#">Contactez-nous</a></li>
+            <li><a href="#">Politique de confidentialité</a></li>
+            <li><a href="#">Conditions générales</a></li>
+            <li><a href="#">Vendre sur NOVA</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="foot-bottom">
+        <p>© 2025 NOVA Store. Tous droits réservés. Douala, Cameroun.</p>
+        <div class="pay-methods">
+          <span class="pay-badge">MTN MoMo</span>
+          <span class="pay-badge">Orange Money</span>
+          <span class="pay-badge">Visa</span>
+          <span class="pay-badge">Mastercard</span>
+          <span class="pay-badge">Cash</span>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ══ CART DRAWER ══ -->
+    <div
+      class="drawer-overlay"
+      id="cartOverlay"
+      onclick="closeOverlay('cartOverlay')"
+    >
+      <div class="cart-drawer" onclick="event.stopPropagation()">
+        <div class="cd-head">
+          <h3>
+            Mon Panier
+            <span id="cdCount" style="font-size: 16px; color: var(--gold)"
+              >(0)</span
+            >
+          </h3>
+          <button class="cd-close" onclick="openCart()">✕</button>
+        </div>
+        <div class="cd-items" id="cdItems">
+          <div class="cart-empty">
+            <div class="ce-icon">🛒</div>
+            <p>Votre panier est vide</p>
+          </div>
+        </div>
+        <div id="cdFoot" style="display: none" class="cd-foot">
+          <div class="cd-subtotal">
+            <span>Total</span><strong id="cdTotal">0 FCFA</strong>
+          </div>
+          <p class="cd-delivery" id="cdDelivery">🚚 Livraison: 2 000 FCFA</p>
+          <button class="cd-checkout" onclick="openPayment()">
+            💳 Passer à la caisse →
+          </button>
+          <button class="cd-continue" onclick="openCart()">
+            Continuer mes achats
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PRODUCT MODAL ══ -->
+    <div
+      class="modal-overlay"
+      id="prodOverlay"
+      onclick="closeOverlay('prodOverlay')"
+    >
+      <div class="prod-modal" id="prodModal" onclick="event.stopPropagation()">
+        <button class="pm-close-btn" onclick="closeOverlay2('prodOverlay')">
+          ✕
+        </button>
+      </div>
+    </div>
+
+    <!-- ══ PAYMENT MODAL ══ -->
+    <div
+      class="pay-overlay"
+      id="payOverlay"
+      onclick="closeOverlay('payOverlay')"
+    >
+      <div
+        class="pay-modal"
+        id="payModal"
+        onclick="event.stopPropagation()"
+      ></div>
+    </div>
+
+    <!-- ══ TOAST ══ -->
+    <div class="toast" id="toast">🛒 Produit ajouté !</div>
+
+    <!-- ══════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════ -->
+    <script>
+      /* ── DATA ── */
+      const PRODUCTS = [
+        {
+          id: 0,
+          name: "Smartphone Nova X Pro 256Go",
+          cat: "électronique",
+          icon: "📱",
+          price: 379000,
+          old: 449000,
+          rating: 4.9,
+          reviews: 312,
+          badge: "sale",
+          desc: 'Écran AMOLED 6.8" 120Hz, processeur Snapdragon 8 Gen 3, triple caméra 200MP, batterie 5500mAh charge rapide 120W. Double SIM, 5G, IP68.',
+          tags: ["5G", "AMOLED", "200MP", "IP68"],
+          weight: "195g",
+        },
+        {
+          id: 1,
+          name: 'Laptop UltraBook Pro 14"',
+          cat: "électronique",
+          icon: "💻",
+          price: 785000,
+          old: 920000,
+          rating: 4.8,
+          reviews: 156,
+          badge: "sale",
+          desc: "Intel Core Ultra 9, 32GB RAM, SSD 1TB NVMe, écran OLED 2.8K tactile, autonomie 22h, poids 1.2kg. Windows 11 Pro inclus.",
+          tags: ["OLED", "32GB RAM", "1TB SSD", "22h"],
+          weight: "1.2kg",
+        },
+        {
+          id: 2,
+          name: "Casque Pro ANC 700",
+          cat: "audio",
+          icon: "🎧",
+          price: 89000,
+          rating: 4.8,
+          reviews: 289,
+          badge: "new-badge",
+          desc: "Réduction de bruit active hybride 40dB, Hi-Res Audio, autonomie 40h, charge sans fil, microphones beamforming IA. Son stéréo 360°.",
+          tags: ["ANC 40dB", "Hi-Res", "40h", "Sans-fil"],
+          weight: "250g",
+        },
+        {
+          id: 3,
+          name: "Enceinte Bluetooth Boom X",
+          cat: "audio",
+          icon: "🔊",
+          price: 45000,
+          old: 55000,
+          rating: 4.7,
+          reviews: 203,
+          badge: "sale",
+          desc: "Son stéréo 360° 40W, waterproof IPX7, autonomie 24h, micro intégré pour appels, lumières LED RGB. Connecte 2 appareils simultanément.",
+          tags: ["40W", "IPX7", "24h", "RGB"],
+          weight: "800g",
+        },
+        {
+          id: 4,
+          name: "Montre Connectée Aura Watch",
+          cat: "électronique",
+          icon: "⌚",
+          price: 68000,
+          rating: 4.6,
+          reviews: 178,
+          badge: "new-badge",
+          desc: 'Écran AMOLED 1.9", GPS intégré, santé avancée (ECG, SpO2, stress), autonomie 7 jours, 70+ modes sport, appels Bluetooth.',
+          tags: ["AMOLED", "GPS", "ECG", "7 jours"],
+          weight: "42g",
+        },
+        {
+          id: 5,
+          name: "Ventilateur Tour Smart Silence",
+          cat: "maison",
+          icon: "🌀",
+          price: 32000,
+          old: 40000,
+          rating: 4.5,
+          reviews: 124,
+          badge: "sale",
+          desc: "Ventilateur colonne 48dB ultra-silencieux, Wi-Fi + contrôle vocal Alexa/Google, 12 vitesses, oscillation 360°, programmable.",
+          tags: ["Wi-Fi", "48dB", "Smart", "360°"],
+          weight: "3.5kg",
+        },
+        {
+          id: 6,
+          name: "Sneakers Urban Air V3",
+          cat: "mode",
+          icon: "👟",
+          price: 45000,
+          old: 58000,
+          rating: 4.8,
+          reviews: 367,
+          badge: "hot",
+          desc: "Chaussures running lifestyle, semelle carbone amortissante, mesh respirant, renfort latéral. Coloris exclusif. Tailles 38 à 46.",
+          tags: ["Carbone", "Mesh", "Taille 38-46", "Lifestyle"],
+          weight: "320g",
+        },
+        {
+          id: 7,
+          name: "Robe Wax Couture Premium",
+          cat: "mode",
+          icon: "👗",
+          price: 18500,
+          rating: 4.9,
+          reviews: 89,
+          badge: "new-badge",
+          desc: "Robe en wax 100% coton premium, design exclusif couture, finitions main. Pièce unique, fabriquée localement par artisans camerounais.",
+          tags: ["100% Coton", "Artisan local", "Pièce unique"],
+          weight: "380g",
+        },
+        {
+          id: 8,
+          name: "Crème Karité Luxe 200ml",
+          cat: "beauté",
+          icon: "🧴",
+          price: 6500,
+          rating: 5.0,
+          reviews: 445,
+          badge: "hot",
+          desc: "Beurre de karité pur grade A, enrichi en huile de marula et vitamine E. Hydratation 72h, anti-âge, texture fondante. Certifié bio.",
+          tags: ["Karité pur", "Bio", "72h hydratation", "Anti-âge"],
+          weight: "200ml",
+        },
+        {
+          id: 9,
+          name: "Sérum Éclat Vitamine C",
+          cat: "beauté",
+          icon: "✨",
+          price: 14500,
+          old: 18000,
+          rating: 4.8,
+          reviews: 231,
+          badge: "sale",
+          desc: "Sérum concentré 20% Vitamine C stabilisée + Acide Hyaluronique + Niacinamide. Effet éclat visible en 14 jours. Tous types de peau.",
+          tags: ["Vit. C 20%", "Acide Hyal.", "14 jours", "Tous types"],
+          weight: "30ml",
+        },
+        {
+          id: 10,
+          name: "Ballon de Football Pro Match",
+          cat: "sport",
+          icon: "⚽",
+          price: 12000,
+          old: 15000,
+          rating: 4.7,
+          reviews: 198,
+          badge: "sale",
+          desc: "Ballon taille 5 certifié FIFA Basic, couture thermocollée 32 panneaux, texture grip améliorée. Idéal matchs et entraînements.",
+          tags: ["FIFA Basic", "Taille 5", "32 panneaux", "Thermocollé"],
+          weight: "420g",
+        },
+        {
+          id: 11,
+          name: "Corbeille Fruits Frais Premium",
+          cat: "alimentation",
+          icon: "🍎",
+          price: 8500,
+          rating: 4.9,
+          reviews: 534,
+          badge: "new-badge",
+          desc: "Sélection quotidienne de fruits de saison : mangues, avocats, ananas, bananes et fruits exotiques. Cueillis le matin, livrés le jour.",
+          tags: ["Frais du jour", "Local", "Bio", "Saisonnier"],
+          weight: "2.5kg",
+        },
+      ];
+
+      const PROMOS = [
+        "🚚 Livraison express 24h",
+        "🎁 -15% code NOVA15",
+        "💎 Qualité premium garantie",
+        "🔒 Paiement 100% sécurisé",
+        "↩️ Retour gratuit 30 jours",
+        "⚡ Stock limité sur certains articles",
+        "🌟 50 000+ clients satisfaits",
+        "📦 Packaging éco-responsable",
+      ];
+
+      let cart = {},
+        wishlist = new Set();
+      let curCat = "all",
+        curSearch = "";
+      let modalProd = null,
+        modalQty = 1;
+      let payStep = 1,
+        payMethod = "momo";
+
+      /* ── FORMAT ── */
+      const fmt = (n) => n.toLocaleString("fr-FR") + " FCFA";
+
+      /* ── PROMO STRIP ── */
+      function buildPromoStrip() {
+        const items = [...PROMOS, ...PROMOS]
+          .map(
+            (t) =>
+              `<div class="promo-item"><span class="pi-icon">●</span><span class="pi-text"><em>${t}</em></span></div>`,
+          )
+          .join("");
+        document.getElementById("promoTrack").innerHTML = items + items;
+      }
+
+      /* ── PRODUCTS ── */
+      function renderProducts(cat = "all", q = "") {
+        const g = document.getElementById("prodGrid");
+        let list = PRODUCTS;
+        if (cat !== "all") list = list.filter((p) => p.cat === cat);
+        if (q)
+          list = list.filter(
+            (p) =>
+              p.name.toLowerCase().includes(q.toLowerCase()) ||
+              p.cat.toLowerCase().includes(q.toLowerCase()),
+          );
+        if (!list.length) {
+          g.innerHTML = `<div style="grid-column:span 4;padding:60px;text-align:center;color:var(--muted)">
+      <div style="font-size:48px;margin-bottom:16px;opacity:.3">🔍</div>
+      <p style="font-size:16px">Aucun produit trouvé pour "<strong>${q}</strong>"</p>
+    </div>`;
+          return;
+        }
+        g.innerHTML = list
+          .map((p) => {
+            const inCart = cart[p.id];
+            const inWish = wishlist.has(p.id);
+            const badgeLabels = {
+              sale: "PROMO",
+              "new-badge": "NOUVEAU",
+              hot: "🔥 TOP",
+              limited: "LIMITÉ",
+            };
+            return `
+    <div class="prod-card" onclick="openProductModal(${p.id})">
+      ${p.badge ? `<div class="pc-badge ${p.badge}">${badgeLabels[p.badge] || p.badge}</div>` : ""}
+      <div class="pc-wish ${inWish ? "on" : ""}" onclick="toggleWish(event,${p.id})">${inWish ? "❤️" : "♡"}</div>
+      <div class="pc-img">
+        ${p.icon}
+        <button class="pc-quick" onclick="addToCart(event,${p.id})">🛒 Ajouter</button>
+      </div>
+      <div class="pc-body">
+        <div class="pc-cat">${p.cat}</div>
+        <div class="pc-name">${p.name}</div>
+        <div class="pc-rating"><span class="pc-stars">★★★★${p.rating >= 4.8 ? "★" : "☆"}</span>${p.rating} · ${p.reviews} avis</div>
+        <div class="pc-foot">
+          <div class="pc-price">
+            ${p.old ? `<s>${fmt(p.old)}</s>` : ""}
+            <span class="current">${fmt(p.price)}</span>
+          </div>
+          <button class="pc-add ${inCart ? "done" : ""}" onclick="addToCart(event,${p.id})">
+            ${inCart ? `✓ ${cart[p.id]}` : "+ Ajouter"}
+          </button>
+        </div>
+      </div>
+    </div>`;
+          })
+          .join("");
+      }
+
+      /* ── ADD TO CART ── */
+      function addToCart(e, id) {
+        if (e && e.stopPropagation) e.stopPropagation();
+        cart[id] = (cart[id] || 0) + 1;
+        updateCartBadge();
+        renderCartItems();
+        renderProducts(curCat, curSearch);
+        showToast("🛒 " + PRODUCTS[id].name.slice(0, 30) + "… ajouté !");
+      }
+
+      function updateCartBadge() {
+        const n = Object.values(cart).reduce((a, b) => a + b, 0);
+        document.getElementById("cartCountBadge").textContent = n;
+        document.getElementById("cdCount").textContent = `(${n})`;
+      }
+
+      /* ── CART ITEMS ── */
+      function renderCartItems() {
+        const el = document.getElementById("cdItems");
+        const foot = document.getElementById("cdFoot");
+        const keys = Object.keys(cart).filter((k) => cart[k] > 0);
+        if (!keys.length) {
+          el.innerHTML =
+            '<div class="cart-empty"><div class="ce-icon">🛒</div><p>Votre panier est vide</p></div>';
+          foot.style.display = "none";
+          return;
+        }
+        foot.style.display = "block";
+        let sub = 0;
+        el.innerHTML = keys
+          .map((id) => {
+            const p = PRODUCTS[id];
+            const s = p.price * cart[id];
+            sub += s;
+            return `<div class="cart-item">
+      <div class="ci-img">${p.icon}</div>
+      <div class="ci-info">
+        <div class="ci-cat">${p.cat}</div>
+        <div class="ci-name">${p.name}</div>
+        <div class="ci-price">${fmt(s)}</div>
+        <div class="ci-ctrl">
+          <button class="q-btn" onclick="chQty(${id},-1)">−</button>
+          <span class="q-val">${cart[id]}</span>
+          <button class="q-btn" onclick="chQty(${id},1)">+</button>
+          <button class="ci-remove" onclick="chQty(${id},-999)" title="Supprimer">🗑</button>
+        </div>
+      </div>
+    </div>`;
+          })
+          .join("");
+        const delivery = sub >= 50000 ? 0 : 2000;
+        document.getElementById("cdTotal").textContent = fmt(sub + delivery);
+        document.getElementById("cdDelivery").textContent =
+          delivery === 0
+            ? "🎉 Livraison gratuite !"
+            : `🚚 Livraison: ${fmt(delivery)} · Gratuite dès ${fmt(50000)}`;
+      }
+
+      function chQty(id, d) {
+        cart[id] = Math.max(0, (cart[id] || 0) + d);
+        if (!cart[id]) delete cart[id];
+        updateCartBadge();
+        renderCartItems();
+        renderProducts(curCat, curSearch);
+      }
+
+      /* ── WISHLIST ── */
+      function toggleWish(e, id) {
+        e.stopPropagation();
+        wishlist.has(id) ? wishlist.delete(id) : wishlist.add(id);
+        const n = wishlist.size;
+        const el = document.getElementById("wishCount");
+        el.textContent = n;
+        el.style.display = n ? "flex" : "none";
+        renderProducts(curCat, curSearch);
+        showToast(
+          wishlist.has(id) ? "❤️ Ajouté aux favoris" : "💔 Retiré des favoris",
+        );
+      }
+
+      /* ── FILTERS ── */
+      function filterCat(e, cat) {
+        e.preventDefault();
+        curCat = cat;
+        document
+          .querySelectorAll(".cat-link")
+          .forEach((a) => a.classList.remove("active"));
+        e.target.classList.add("active");
+        syncChips(cat);
+        renderProducts(cat, curSearch);
+        document
+          .getElementById("produits")
+          .scrollIntoView({ behavior: "smooth" });
+      }
+      function filterCat2(cat) {
+        curCat = cat;
+        syncChips(cat);
+        syncCatBar(cat);
+        renderProducts(cat, curSearch);
+        document
+          .getElementById("produits")
+          .scrollIntoView({ behavior: "smooth" });
+      }
+      function filterChip(el, cat) {
+        document
+          .querySelectorAll(".filter-chips .chip")
+          .forEach((c) => c.classList.remove("active"));
+        el.classList.add("active");
+        curCat = cat;
+        syncCatBar(cat);
+        renderProducts(cat, curSearch);
+      }
+      function filterChip2(cat) {
+        curCat = cat;
+        syncChips(cat);
+        syncCatBar(cat);
+        renderProducts(cat, curSearch);
+        document
+          .getElementById("produits")
+          .scrollIntoView({ behavior: "smooth" });
+      }
+      function syncChips(cat) {
+        document.querySelectorAll(".filter-chips .chip").forEach((c) => {
+          c.classList.toggle(
+            "active",
+            c.getAttribute("onclick")?.includes(`'${cat}'`),
+          );
+        });
+      }
+      function syncCatBar(cat) {
+        document.querySelectorAll(".cat-link").forEach((a) => {
+          a.classList.toggle(
+            "active",
+            a.getAttribute("onclick")?.includes(`'${cat}'`),
+          );
+        });
+      }
+      function handleSearch(q) {
+        curSearch = q;
+        renderProducts(curCat, q);
+      }
+
+      /* ── PRODUCT MODAL ── */
+      function openProductModal(id) {
+        const p = PRODUCTS[id];
+        modalProd = p;
+        modalQty = 1;
+        const stars = "★★★★" + (p.rating >= 4.8 ? "★" : "☆");
+        document.getElementById("prodModal").innerHTML = `
+    <button class="pm-close-btn" onclick="closeOverlay2('prodOverlay')">✕</button>
+    <div class="pm-layout">
+      <div class="pm-visual">${p.icon}</div>
+      <div class="pm-info">
+        <div class="pm-cat">${p.cat}</div>
+        <div class="pm-name">${p.name}</div>
+        <div class="pm-rating"><span style="color:#F59E0B">${stars}</span>${p.rating} · ${p.reviews} avis · ${p.weight}</div>
+        <p class="pm-desc">${p.desc}</p>
+        <div class="pm-price-block">
+          <span class="pm-price">${fmt(p.price)}</span>
+          ${p.old ? `<span class="pm-old">${fmt(p.old)}</span>` : ""}
+        </div>
+        <div class="pm-qty-row">
+          <button class="q-btn pm-qb" onclick="mQty(-1)">−</button>
+          <span class="pm-qty-val q-val" id="mQtyEl">1</span>
+          <button class="q-btn pm-qb" onclick="mQty(1)">+</button>
+          <span style="font-size:12px;color:var(--muted)">${p.weight}</span>
+        </div>
+        <button class="pm-add-btn" onclick="modalAddCart()">
+          🛒 Ajouter au panier · <span id="mSubEl">${fmt(p.price)}</span>
+        </button>
+        <button class="pm-wish-btn" onclick="toggleWish(event,${id})">
+          ${wishlist.has(id) ? "❤️ Dans vos favoris" : "♡ Ajouter aux favoris"}
+        </button>
+        <div class="pm-features">
+          ${(p.tags || []).map((t) => `<span class="pm-feat-tag">${t}</span>`).join("")}
+        </div>
+      </div>
+    </div>`;
+        document.getElementById("prodOverlay").classList.add("open");
+      }
+      function mQty(d) {
+        modalQty = Math.max(1, modalQty + d);
+        document.getElementById("mQtyEl").textContent = modalQty;
+        document.getElementById("mSubEl").textContent = fmt(
+          modalProd.price * modalQty,
+        );
+      }
+      function modalAddCart() {
+        cart[modalProd.id] = (cart[modalProd.id] || 0) + modalQty;
+        updateCartBadge();
+        renderCartItems();
+        renderProducts(curCat, curSearch);
+        showToast("✅ Ajouté au panier !");
+        closeOverlay2("prodOverlay");
+      }
+
+      /* ── PAYMENT ── */
+      function openPayment() {
+        closeOverlay2("cartOverlay");
+        payStep = 1;
+        payMethod = "momo";
+        renderPayStep();
+        document.getElementById("payOverlay").classList.add("open");
+      }
+
+      function getCartTotals() {
+        const keys = Object.keys(cart).filter((k) => cart[k] > 0);
+        const sub = keys.reduce(
+          (s, id) => s + PRODUCTS[id].price * cart[id],
+          0,
+        );
+        const delivery = sub >= 50000 ? 0 : 2000;
+        return { sub, delivery, total: sub + delivery, keys };
+      }
+
+      function renderPayStep() {
+        const { sub, delivery, total, keys } = getCartTotals();
+        const modal = document.getElementById("payModal");
+        const steps = [1, 2, 3]
+          .map((i) => `<div class="ps ${i <= payStep ? "done" : ""}"></div>`)
+          .join("");
+
+        if (payStep === 1) {
+          modal.innerHTML = `
+      <div class="pay-head">
+        <div class="pay-step-icon">📦</div>
+        <div><h3>Livraison</h3><p>Étape 1 sur 3 — Informations de livraison</p></div>
+        <button class="pay-head-close" onclick="closeOverlay2('payOverlay')">✕</button>
+      </div>
+      <div class="pay-progress"><div class="progress-steps">${steps}</div></div>
+      <div class="pay-body">
+        <div class="form-section">
+          <div class="form-section-title">Coordonnées</div>
+          <div class="frow"><div class="fgroup"><label>Prénom</label><input placeholder="Jean"></div><div class="fgroup"><label>Nom</label><input placeholder="Dupont"></div></div>
+          <div class="fgroup"><label>Téléphone</label><input type="tel" placeholder="+237 6 XX XX XX XX"></div>
+          <div class="fgroup"><label>Email (facultatif)</label><input type="email" placeholder="jean@email.com"></div>
+        </div>
+        <div class="form-section">
+          <div class="form-section-title">Adresse de livraison</div>
+          <div class="fgroup"><label>Ville</label><select><option>Douala</option><option>Yaoundé</option><option>Bafoussam</option><option>Buea</option><option>Limbé</option></select></div>
+          <div class="fgroup"><label>Quartier / Rue</label><input placeholder="Akwa, Bonanjo, Bastos…"></div>
+          <div class="fgroup"><label>Repère / Indication</label><input placeholder="Près du carrefour, bâtiment bleu…"></div>
+        </div>
+        <button class="pay-btn-main" onclick="payStep=2;renderPayStep()">Continuer → Paiement</button>
+        <div class="secure-badge">🔒 Données chiffrées · SSL 256-bit</div>
+      </div>`;
+        } else if (payStep === 2) {
+          const methods = [
+            { id: "momo", icon: "📱", name: "MTN MoMo", desc: "Mobile Money" },
+            {
+              id: "orange",
+              icon: "🟠",
+              name: "Orange Money",
+              desc: "Paiement mobile",
+            },
+            {
+              id: "visa",
+              icon: "💳",
+              name: "Visa / Mastercard",
+              desc: "Carte bancaire",
+            },
+            { id: "cash", icon: "💵", name: "Cash", desc: "À la livraison" },
+          ];
+          modal.innerHTML = `
+      <div class="pay-head">
+        <div class="pay-step-icon">💳</div>
+        <div><h3>Paiement</h3><p>Étape 2 sur 3 — Choisissez votre mode</p></div>
+        <button class="pay-head-close" onclick="closeOverlay2('payOverlay')">✕</button>
+      </div>
+      <div class="pay-progress"><div class="progress-steps">${steps}</div></div>
+      <div class="pay-body">
+        <button class="pay-btn-back" onclick="payStep=1;renderPayStep()">← Retour</button>
+        <div class="form-section-title" style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:8px;">Mode de paiement <span style="flex:1;height:1px;background:var(--border);display:block"></span></div>
+        <div class="pay-methods-grid">
+          ${methods
+            .map(
+              (
+                m,
+              ) => `<div class="pm-tile ${payMethod === m.id ? "selected" : ""}" onclick="payMethod='${m.id}';renderPayStep()">
+            <div class="pm-emoji">${m.icon}</div>
+            <div class="pm-name">${m.name}</div>
+            <div class="pm-desc">${m.desc}</div>
+          </div>`,
+            )
+            .join("")}
+        </div>
+        ${payMethod === "momo" ? `<div class="fgroup"><label>Numéro MTN MoMo</label><input type="tel" placeholder="6XX XX XX XX" style="font-size:18px;letter-spacing:2px"></div>` : ""}
+        ${payMethod === "orange" ? `<div class="fgroup"><label>Numéro Orange Money</label><input type="tel" placeholder="6XX XX XX XX" style="font-size:18px;letter-spacing:2px"></div>` : ""}
+        ${
+          payMethod === "visa"
+            ? `
+          <div class="fgroup"><label>Numéro de carte</label><input placeholder="4242 4242 4242 4242" maxlength="19" style="font-size:18px;letter-spacing:3px"></div>
+          <div class="frow">
+            <div class="fgroup"><label>Expiration</label><input placeholder="MM / AA" maxlength="7"></div>
+            <div class="fgroup"><label>CVV</label><input placeholder="●●●" maxlength="4" type="password"></div>
+          </div>
+          <div class="fgroup"><label>Nom sur la carte</label><input placeholder="JEAN DUPONT"></div>
+        `
+            : ""
+        }
+        ${payMethod === "cash" ? `<div style="background:var(--gold-dim);border:1px solid rgba(212,168,83,.2);border-radius:var(--radius);padding:16px;font-size:14px;color:var(--muted);line-height:1.7">💵 Vous payez en espèces à la réception du colis. Préparez le montant exact si possible : <strong style="color:var(--gold2)">${fmt(total)}</strong></div>` : ""}
+        <button class="pay-btn-main" style="margin-top:20px" onclick="payStep=3;renderPayStep()">Vérifier la commande →</button>
+        <div class="secure-badge">🔒 Paiement sécurisé · Crypté SSL</div>
+      </div>`;
+        } else if (payStep === 3) {
+          const methodLabels = {
+            momo: "MTN MoMo",
+            orange: "Orange Money",
+            visa: "Carte Visa / Mastercard",
+            cash: "Cash à la livraison",
+          };
+          modal.innerHTML = `
+      <div class="pay-head">
+        <div class="pay-step-icon">✅</div>
+        <div><h3>Confirmation</h3><p>Étape 3 sur 3 — Vérifiez votre commande</p></div>
+        <button class="pay-head-close" onclick="closeOverlay2('payOverlay')">✕</button>
+      </div>
+      <div class="pay-progress"><div class="progress-steps">${steps}</div></div>
+      <div class="pay-body">
+        <button class="pay-btn-back" onclick="payStep=2;renderPayStep()">← Retour</button>
+        <div class="order-summary">
+          ${keys.map((id) => `<div class="os-row"><span>${PRODUCTS[id].name.slice(0, 28)}… ×${cart[id]}</span><span>${fmt(PRODUCTS[id].price * cart[id])}</span></div>`).join("")}
+          <div class="os-row"><span>Livraison</span><span>${delivery === 0 ? "Gratuite 🎉" : fmt(delivery)}</span></div>
+          <div class="os-row total-row"><span>Total à payer</span><span class="os-val">${fmt(total)}</span></div>
+        </div>
+        <div style="background:var(--ink3);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:20px;font-size:13px;color:var(--muted)">
+          💳 Paiement via <strong style="color:var(--text)">${methodLabels[payMethod]}</strong>
+        </div>
+        <button class="pay-btn-main success" onclick="confirmOrder()">
+          🎉 Confirmer et payer · ${fmt(total)}
+        </button>
+        <div class="secure-badge">🔒 Commande 100% sécurisée · NOVA Store</div>
+      </div>`;
+        }
+      }
+
+      function confirmOrder() {
+        const orderNum = "NV-" + Date.now().toString().slice(-7);
+        document.getElementById("payModal").innerHTML = `
+    <div class="success-wrap">
+      <div class="sw-icon">🎉</div>
+      <h3>Commande Confirmée !</h3>
+      <div class="order-num-badge">Commande n° ${orderNum}</div>
+      <p>Merci pour votre achat sur NOVA ! Votre commande est en cours de traitement.<br><br>Vous recevrez une confirmation par SMS dans les prochaines minutes. Notre équipe de livraison vous contactera très bientôt.</p>
+      <button class="pay-btn-main" style="margin-top:28px" onclick="closeOverlay2('payOverlay');resetAfterOrder()">Continuer mes achats →</button>
+    </div>`;
+        cart = {};
+        updateCartBadge();
+        renderCartItems();
+      }
+
+      function resetAfterOrder() {
+        renderProducts(curCat, curSearch);
+      }
+
+      /* ── OVERLAYS ── */
+      function openCart() {
+        document.getElementById("cartOverlay").classList.toggle("open");
+        renderCartItems();
+      }
+      function closeOverlay(id) {
+        document.getElementById(id).classList.remove("open");
+      }
+      function closeOverlay2(id) {
+        document.getElementById(id).classList.remove("open");
+      }
+
+      /* ── TOAST ── */
+      let toastTimer;
+      function showToast(msg) {
+        const t = document.getElementById("toast");
+        clearTimeout(toastTimer);
+        t.textContent = msg;
+        t.classList.add("show");
+        toastTimer = setTimeout(() => t.classList.remove("show"), 2800);
+      }
+
+      /* ── NEWSLETTER ── */
+      function subscribeNL() {
+        showToast("📧 Inscription confirmée ! Merci 🙏");
+      }
+
+      /* ── INIT ── */
+      buildPromoStrip();
+      renderProducts();
+    </script>
+  </body>
+</html>
