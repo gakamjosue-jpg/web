@@ -2858,6 +2858,13 @@
       /* ── FORMAT ── */
       const fmt = (n) => n.toLocaleString("fr-FR") + " FCFA";
 
+      /* ── SANITIZE (prevent XSS) ── */
+      function escapeHTML(str) {
+        const div = document.createElement("div");
+        div.appendChild(document.createTextNode(str));
+        return div.innerHTML;
+      }
+
       /* ── PROMO STRIP ── */
       function buildPromoStrip() {
         const items = [...PROMOS, ...PROMOS]
@@ -2883,7 +2890,7 @@
         if (!list.length) {
           g.innerHTML = `<div style="grid-column:span 4;padding:60px;text-align:center;color:var(--muted)">
       <div style="font-size:48px;margin-bottom:16px;opacity:.3">🔍</div>
-      <p style="font-size:16px">Aucun produit trouvé pour "<strong>${q}</strong>"</p>
+      <p style="font-size:16px">Aucun produit trouvé pour "<strong>${escapeHTML(q)}</strong>"</p>
     </div>`;
           return;
         }
@@ -3167,7 +3174,7 @@
           <div class="fgroup"><label>Quartier / Rue</label><input placeholder="Akwa, Bonanjo, Bastos…"></div>
           <div class="fgroup"><label>Repère / Indication</label><input placeholder="Près du carrefour, bâtiment bleu…"></div>
         </div>
-        <button class="pay-btn-main" onclick="payStep=2;renderPayStep()">Continuer → Paiement</button>
+        <button class="pay-btn-main" onclick="if(!validateStep1())return;payStep=2;renderPayStep()">Continuer → Paiement</button>
         <div class="secure-badge">🔒 Données chiffrées · SSL 256-bit</div>
       </div>`;
         } else if (payStep === 2) {
@@ -3225,7 +3232,7 @@
             : ""
         }
         ${payMethod === "cash" ? `<div style="background:var(--gold-dim);border:1px solid rgba(212,168,83,.2);border-radius:var(--radius);padding:16px;font-size:14px;color:var(--muted);line-height:1.7">💵 Vous payez en espèces à la réception du colis. Préparez le montant exact si possible : <strong style="color:var(--gold2)">${fmt(total)}</strong></div>` : ""}
-        <button class="pay-btn-main" style="margin-top:20px" onclick="payStep=3;renderPayStep()">Vérifier la commande →</button>
+        <button class="pay-btn-main" style="margin-top:20px" onclick="if(!validateStep2())return;payStep=3;renderPayStep()">Vérifier la commande →</button>
         <div class="secure-badge">🔒 Paiement sécurisé · Crypté SSL</div>
       </div>`;
         } else if (payStep === 3) {
@@ -3258,6 +3265,46 @@
         <div class="secure-badge">🔒 Commande 100% sécurisée · NOVA Store</div>
       </div>`;
         }
+      }
+
+      /* ── PAYMENT VALIDATION ── */
+      function validateStep1() {
+        const inputs = document.querySelectorAll('.pay-body .fgroup input:not([type=email])');
+        const required = [0, 1, 2]; // Prénom, Nom, Téléphone
+        for (const i of required) {
+          if (inputs[i] && !inputs[i].value.trim()) {
+            showToast('⚠️ Veuillez remplir tous les champs obligatoires');
+            inputs[i].focus();
+            return false;
+          }
+        }
+        const citySelect = document.querySelector('.pay-body select');
+        if (citySelect && !citySelect.value) {
+          showToast('⚠️ Veuillez sélectionner une ville');
+          return false;
+        }
+        return true;
+      }
+
+      function validateStep2() {
+        if (payMethod === 'momo' || payMethod === 'orange') {
+          const phoneInput = document.querySelector('.pay-body .fgroup input[type=tel]');
+          if (!phoneInput || !phoneInput.value.trim()) {
+            showToast('⚠️ Veuillez entrer votre numéro de téléphone');
+            if (phoneInput) phoneInput.focus();
+            return false;
+          }
+        } else if (payMethod === 'visa') {
+          const inputs = document.querySelectorAll('.pay-body .fgroup input');
+          for (const input of inputs) {
+            if (!input.value.trim()) {
+              showToast('⚠️ Veuillez remplir tous les champs de carte');
+              input.focus();
+              return false;
+            }
+          }
+        }
+        return true;
       }
 
       function confirmOrder() {
@@ -3303,7 +3350,14 @@
 
       /* ── NEWSLETTER ── */
       function subscribeNL() {
+        const emailInput = document.querySelector(".nl-input");
+        const email = emailInput ? emailInput.value.trim() : "";
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          showToast("⚠️ Veuillez entrer une adresse email valide");
+          return;
+        }
         showToast("📧 Inscription confirmée ! Merci 🙏");
+        if (emailInput) emailInput.value = "";
       }
 
       /* ── INIT ── */
